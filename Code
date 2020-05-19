@@ -1,0 +1,71 @@
+try:
+from Tkinter import *
+except ImportError:
+from tkinter import *
+
+import tkinter.font
+from gpiozero import LED
+import RPi.GPIO as GPIO
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+
+
+led = LED(18)
+ledd = LED(23)
+leddd = LED(26)
+
+##GUI##
+win = Tk()
+win.title("LED CONTROLLER")
+myFont = tkinter.font.Font(family = 'Helvetica', size = 12, weight = "bold")
+
+##FUNCTIONS##
+def ledToggle():
+if  led.is_lit:
+    led.off()
+
+else:
+    led.on()
+    ledd.off()
+    leddd.off()
+
+
+def leddToggle():
+if  ledd.is_lit:
+    ledd.off()
+
+else:
+    ledd.on()
+    led.off()
+    leddd.off()
+
+
+def ledddToggle():
+if  leddd.is_lit:
+    leddd.off()
+
+else:
+    leddd.on()
+    led.off()
+    ledd.off()
+
+    
+def close():
+GPIO.cleanup()
+win.destroy()
+
+
+##BUTTONS##
+ledButton = Radiobutton(win, text = 'RED LED', value=1, font = myFont, command = ledToggle, bg = 'white', height = 1, width = 24)
+leddButton = Radiobutton(win, text = 'BLUE LED', value=2, font = myFont, command = leddToggle, bg = 'white', height = 1, width = 24)
+ledddButton = Radiobutton(win, text = 'GREEN LED', value=3, font = myFont, command = ledddToggle, bg = 'white', height = 1, width = 24)
+ledButton.grid(row=0, column=1)
+leddButton.grid(row=2, column=1)
+ledddButton.grid(row=1, column=1)
+
+exitButton = Radiobutton(win, text = 'EXIT', value=4, font = myFont, command = close, bg = 'red', height = 1, width = 10)
+exitButton.grid(row=3, column=1)
+
+win.protocol("WM DELETE WINDOW", close)
+win.mainloop()
